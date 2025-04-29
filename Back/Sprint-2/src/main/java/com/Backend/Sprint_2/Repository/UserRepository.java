@@ -57,6 +57,22 @@ public class UserRepository {
         return userList;
     }
 
+    public List<User> getAllSeniorUsers() throws ExecutionException, InterruptedException {
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future = dbFirestore.collection(COLLECTION_NAME).get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+
+        List<User> userList = new ArrayList<>();
+        for (QueryDocumentSnapshot document : documents) {
+            //if document.userlevel == "Senior"
+            String level = document.getString("level");
+            if("Senior".equalsIgnoreCase(level)){
+                userList.add(document.toObject(User.class));
+            }
+        }
+        return userList;
+    }
+
     public List<User> getAvailableUsers() throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         ApiFuture<QuerySnapshot> future = dbFirestore.collection(COLLECTION_NAME)

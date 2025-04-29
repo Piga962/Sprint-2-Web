@@ -47,5 +47,8 @@ public class UserService {
         }
         return null;
     }
+    public List<User> getAllSeniorUsers() throws ExecutionException, InterruptedException {
+        return userRepository.getAllSeniorUsers();
+    }
 
 }
