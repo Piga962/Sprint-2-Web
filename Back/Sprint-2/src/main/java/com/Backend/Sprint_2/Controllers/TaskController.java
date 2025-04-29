@@ -105,8 +105,8 @@ public class TaskController {
         }
     }
 
-    @PatchMapping("/{id}/assign")
-    public ResponseEntity<String> assignTaskToUser(@PathVariable String id, @RequestParam String userId) {
+    @PatchMapping("/{id}/{userId}/assign")
+    public ResponseEntity<String> assignTaskToUser(@PathVariable String id, @PathVariable String userId) {
         try {
             String result = taskService.assignTaskToUser(id, userId);
             if (result != null) {
@@ -120,7 +120,7 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}/agentAssign")
-    public ResponseEntity<String> agentAssignTask(@PathVariable String id, @RequestParam String userId) throws ExecutionException, InterruptedException {
+    public ResponseEntity<String> agentAssignTask(@PathVariable String id) throws ExecutionException, InterruptedException {
 
         List<User> users = userService.getAllUsers();
         List<User> seniors = userService.getAllSeniorUsers();
