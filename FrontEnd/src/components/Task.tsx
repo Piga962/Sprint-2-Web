@@ -52,14 +52,15 @@ export default function Ticket({
         gap: "16px",
       }}
     >
-      <img
-        src="src/assets/rocket.png"
-        alt="ChitChat Logo"
-        style={{ width: "48px", height: "48px", flexShrink: 0 }}
-      />
-
       <div style={{ flex: 1 }}>
-        <p style={{ fontSize: "18px", fontWeight: "500", marginBottom: "8px" }}>
+        <p
+          style={{
+            color: "black",
+            fontSize: "18px",
+            fontWeight: "500",
+            marginBottom: "8px",
+          }}
+        >
           {description}
         </p>
 
@@ -86,6 +87,7 @@ export default function Ticket({
         {isModalOpen && (
           <div
             style={{
+              color: "black",
               marginTop: "16px",
               padding: "12px",
               backgroundColor: "#fff",

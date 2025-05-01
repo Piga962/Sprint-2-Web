@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Ticket from "../components/Task";
 
 interface Task {
+  id: string;
   description: string;
   status: "Complete" | "Incomplete";
   priority: "Low" | "Critical";
@@ -11,20 +12,26 @@ interface Task {
 const Dashboard = () => {
   const [tickets, setTickets] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
-  const userId = "123"; // Reemplaza con el ID real del usuario
+  const userId = "RNuPnSEpgwlqPitgOkjW";
+
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:8080/user/${userId}`)
+    fetch(`/tasks/user/${userId}`)
       .then((res) => {
         if (!res.ok) throw new Error("Error al obtener tickets");
         return res.json();
       })
       .then((data) => setTickets(data))
-      .catch((error) => console.error(error))
+      .catch((error) => {
+        console.error(error);
+        setError("No se pudieron cargar los tickets.");
+      })
       .finally(() => setLoading(false));
   }, [userId]);
 
   if (loading) return <p>Cargando tickets...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div style={{ padding: "20px" }}>
@@ -32,9 +39,9 @@ const Dashboard = () => {
       {tickets.length === 0 ? (
         <p>No hay tickets asignados.</p>
       ) : (
-        tickets.map((ticket, index) => (
+        tickets.map((ticket) => (
           <Ticket
-            key={index}
+            key={ticket.id}
             status={ticket.status}
             priority={ticket.priority}
             description={ticket.description}
