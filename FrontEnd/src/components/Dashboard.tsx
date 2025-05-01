@@ -1,0 +1,49 @@
+import { useEffect, useState } from "react";
+import Ticket from "../components/Task";
+
+interface Task {
+  description: string;
+  status: "Complete" | "Incomplete";
+  priority: "Low" | "Critical";
+  userId: string;
+}
+
+const Dashboard = () => {
+  const [tickets, setTickets] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+  const userId = "123"; // Reemplaza con el ID real del usuario
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/user/${userId}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al obtener tickets");
+        return res.json();
+      })
+      .then((data) => setTickets(data))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, [userId]);
+
+  if (loading) return <p>Cargando tickets...</p>;
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h1 style={{ marginBottom: "20px" }}>Tus Tickets</h1>
+      {tickets.length === 0 ? (
+        <p>No hay tickets asignados.</p>
+      ) : (
+        tickets.map((ticket, index) => (
+          <Ticket
+            key={index}
+            status={ticket.status}
+            priority={ticket.priority}
+            description={ticket.description}
+            userId={ticket.userId}
+          />
+        ))
+      )}
+    </div>
+  );
+};
+
+export default Dashboard;
