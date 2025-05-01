@@ -4,6 +4,7 @@ import SignIn from "./components/SignIn";
 import "./App.css";
 import Ticket from "./components/Task";
 import Dashboard from "./components/Dashboard";
+import ManagerDashboard from "./components/ManagerDashboard";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/manager_dashboard" element={<ManagerDashboard />} />
       </Routes>
     </Router>
   );
