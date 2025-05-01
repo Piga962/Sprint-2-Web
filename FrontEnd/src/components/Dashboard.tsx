@@ -9,12 +9,11 @@ interface Task {
   userId: string;
 }
 
-const Dashboard = () => {
+export default function Dashboard() {
   const [tickets, setTickets] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
-  const userId = "RNuPnSEpgwlqPitgOkjW";
-
   const [error, setError] = useState("");
+  const userId = "RNuPnSEpgwlqPitgOkjW";
 
   useEffect(() => {
     fetch(`/tasks/user/${userId}`)
@@ -30,6 +29,43 @@ const Dashboard = () => {
       .finally(() => setLoading(false));
   }, [userId]);
 
+  const handleStatusChange = (
+    id: string,
+    newStatus: "Complete" | "Incomplete"
+  ) => {
+    // find the Ticket we want to change its status
+    const ticketToUpdate = tickets.find((t) => t.id === id);
+
+    if (!ticketToUpdate) {
+      console.error("Ticket no encontrado");
+      return;
+    }
+    const updatedTicket = {
+      ...ticketToUpdate,
+      status: newStatus, // Update the status
+    };
+
+    // Fetch the PUT endpoint to change the status
+    fetch(`/tasks/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedTicket), // Send the whole thing
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al actualizar estado");
+        // Update the local state
+        setTickets((prev) =>
+          prev.map((t) => (t.id === id ? { ...t, status: newStatus } : t))
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error al actualizar el estado del ticket.");
+      });
+  };
+
   if (loading) return <p>Cargando tickets...</p>;
   if (error) return <p>{error}</p>;
 
@@ -42,15 +78,15 @@ const Dashboard = () => {
         tickets.map((ticket) => (
           <Ticket
             key={ticket.id}
+            id={ticket.id}
             status={ticket.status}
             priority={ticket.priority}
             description={ticket.description}
             userId={ticket.userId}
+            onStatusChange={handleStatusChange}
           />
         ))
       )}
     </div>
   );
-};
-
-export default Dashboard;
+}

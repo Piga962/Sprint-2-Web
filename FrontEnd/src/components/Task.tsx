@@ -1,22 +1,26 @@
 import { useState } from "react";
 
 interface TicketProps {
+  id: string; // Agregamos el id para poder hacer la actualización
   status: "Complete" | "Incomplete";
   priority: "Low" | "Critical";
   description: string;
   userId: string;
+  onStatusChange: (id: string, newStatus: "Complete" | "Incomplete") => void; // Función para manejar el cambio de estado
 }
 
 export default function Ticket({
+  id,
   status,
   priority,
   description,
   userId,
+  onStatusChange,
 }: TicketProps) {
   const [ticketStatus, setTicketStatus] = useState(status);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const statusColors: Record<typeof status, React.CSSProperties> = {
+  const statusColors: Record<typeof ticketStatus, React.CSSProperties> = {
     Complete: {
       backgroundColor: "#bbf7d0", // light green
       color: "#166534", // dark green
@@ -36,6 +40,12 @@ export default function Ticket({
   const priorityColors: Record<typeof priority, React.CSSProperties> = {
     Low: { color: "#16a34a", fontSize: "14px" }, // green
     Critical: { color: "#dc2626", fontWeight: "bold", fontSize: "14px" }, // red
+  };
+
+  const toggleStatus = () => {
+    const newStatus = ticketStatus === "Complete" ? "Incomplete" : "Complete";
+    setTicketStatus(newStatus);
+    onStatusChange(id, newStatus); // Llamamos a la función pasada para actualizar el estado
   };
 
   return (
@@ -70,6 +80,23 @@ export default function Ticket({
         </div>
 
         <button
+          onClick={toggleStatus}
+          style={{
+            backgroundColor: "#64548f",
+            borderRadius: "20px",
+            padding: "8px 16px",
+            fontSize: "14px",
+            color: "white",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          {ticketStatus === "Complete"
+            ? "Marcar como Incompleto"
+            : "Marcar como Completo"}
+        </button>
+
+        <button
           onClick={() => setIsModalOpen(true)}
           style={{
             backgroundColor: "#64548f",
@@ -79,6 +106,7 @@ export default function Ticket({
             color: "white",
             border: "none",
             cursor: "pointer",
+            marginLeft: "10px",
           }}
         >
           Details
