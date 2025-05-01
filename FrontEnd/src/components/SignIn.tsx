@@ -8,7 +8,7 @@ export default function SignIn() {
       <h1>Login</h1>
       <input type="email" />
       <input type="password" />
-      <button onClick={}>Login</button>
+      <button>Login</button>
     </div>
   );
 }
