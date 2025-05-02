@@ -15,7 +15,10 @@ export default function ManagerDashboard() {
   const [tickets, setTickets] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const userId = "RNuPnSEpgwlqPitgOkjW";
+
+  const user = JSON.parse(localStorage.getItem("user") ?? "null");
+  const userId = user?.id;
+
 
   useEffect(() => {
     fetch(`/tasks/user/${userId}`)
