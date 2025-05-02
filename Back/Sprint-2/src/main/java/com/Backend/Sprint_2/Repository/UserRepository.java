@@ -30,6 +30,24 @@ public class UserRepository {
         }
     }
 
+    //Login User modified
+    public User login(String name, String password) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future = db.collection(COLLECTION_NAME)
+            .whereEqualTo("name", name)
+            .whereEqualTo("password", password)
+            .whereEqualTo("available", true)
+            .get();
+    
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        if (!documents.isEmpty()) {
+            return documents.get(0).toObject(User.class);
+        } else {
+            return null;
+        }
+    }
+    
+
     // Get User by Id
     public User getUserById(String id) throws ExecutionException, InterruptedException{
         Firestore db = FirestoreClient.getFirestore();

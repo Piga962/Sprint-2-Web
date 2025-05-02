@@ -28,6 +28,23 @@ public class UserController {
         }
     }
 
+    //Login User modified only return user with role
+    // and only if the user is available
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User loginRequest) {
+        try {
+            User user = userService.login(loginRequest.getName(), loginRequest.getPassword());
+
+            if (user != null) {
+                return new ResponseEntity<>(user, HttpStatus.OK); // Retorna el usuario con su rol
+            } else {
+                return new ResponseEntity<>("Credenciales inválidas o usuario inactivo", HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
         try {

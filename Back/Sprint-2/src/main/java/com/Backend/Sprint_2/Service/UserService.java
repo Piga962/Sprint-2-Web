@@ -19,6 +19,11 @@ public class UserService {
         return userRepository.saveUser(user);
     }
 
+    //Modified login
+    public User login(String name, String password) throws ExecutionException, InterruptedException {
+        return userRepository.login(name, password);
+    }
+
     public User getUserById(String id) throws ExecutionException, InterruptedException {
         return userRepository.getUserById(id);
     }
